@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./css/common.css">
+	<link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+	<div class="web clearfix">
+		<div class="left">
+			<div class="photo">
+          		<div class="file-box"> 
+          			<label for="input_file">请选择你要识别的图片</label>
+          			<input type="file" name="file" id="input_file" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" onchange="imgPreview(this)" > 
+          			<div class="img-box">
+          				<img id="preview"/>
+          			</div>
+          		</div>
+          		<button type="button" id="btn1">载入图片</button>
+          	</div>
+        </div>
+		<div class="right">
+			<p>车牌定位</p>
+			<div class="location">
+				<img src="" alt="" id="imgLocation">
+			</div>
+			<p>车牌分割</p>
+			<div class="divide clearfix">
+				<img src="" alt="">
+				<img src="" alt="">
+				<img src="" alt="">
+				<img src="" alt="">
+				<img src="" alt="">
+				<img src="" alt="">
+				<img src="" alt="">
+			</div>
+			<p>最终识别</p>
+			<div class="final">
+				<span>车牌号为</span>
+				<input type="text" value="" disabled id="info">
+			</div>
+			<div class="btn">
+				<button type="button" id="btn2">车牌定位</button>
+				<button type="button" id="btn3">车牌分割</button>
+				<button type="button" id="btn4">车牌识别</button>
+			</div>
+		</div>
+	</div>
+	<script src="./js/jquery.min.js" type="text/javascript"></script>
+	<script>
+		var dataString = '';
+		var oDiv = document.querySelector('.divide');
+		var aImg = oDiv.querySelectorAll('img');
+		function imgPreview(fileDom) { 
+			//判断是否支持FileReader 
+			if(window.FileReader) { 
+				var reader = new FileReader(); 
+			} else { 
+				alert("您的设备不支持图片预览功能，如需该功能请升级您的设备！"); 
+			} 
+			//获取文件 
+			var file = fileDom.files[0]; 
+			var imageType = /^image\//; 
+			//是否是图片 
+			if(!imageType.test(file.type)) { 
+				alert("请选择图片！"); 
+				return; 
+			} 
+			//读取完成 
+			reader.onload = function(e) { 
+			//获取图片dom 
+				var img = document.getElementById("preview"); 
+			//图片路径设置为读取的图片 
+				img.src = e.target.result; 
+			}; 
+			reader.readAsDataURL(file); 
+		}
+
+		$('#btn1').click(function () {
+			$('#btn1').attr('disabled', 'disabled');
+			var formData = new FormData(); 
+			formData.append('file', $('#input_file')[0].files[0]); 
+			$.ajax({ 
+				type: 'post',
+				url: 'http://47.95.249.186:80/upload',  
+				//上传文件不需要缓存 
+				data: formData, 
+				processData: false, 
+				// 告诉jQuery不要去处理发送的数据
+				// 必须false才会避开jQuery对 formdata 的默认处理
+                // XMLHttpRequest会对 formdata 进行正确的处理 	
+				contentType: false, 
+				// 告诉jQuery不要去设置Content-Type请求头
+				// 必须false才会自动加上正确的Content-Type 
+				success: function (data) { 
+					$('#btn1').removeAttr('disabled');
+					dataString = data.data;
+					if(data.code !== 0) {
+						alert(data.title + ":" + data.msg);
+					}
+				}
+			}) 
+		})
+		$('#btn2').click(function () {
+			$('#btn2').attr('disabled', 'disabled');
+			$.ajax({
+				type: 'get',
+				url: 'http://47.95.249.186:80/getlicenseplatelocation'+'?mdkey='+dataString,
+				data: '',
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					$('#btn2').removeAttr('disabled');
+					if (data.code !== 0) {
+						alert(data.title + ":" + data.msg);
+					} else {
+						var location = data.data;
+						$('#imgLocation').attr('src', location);
+					}
+				}
+			})
+		})
+		$('#btn3').click(function () {
+			$('#btn3').attr('disabled', 'disabled');
+			$.ajax({
+				type: 'get',
+				url: 'http://47.95.249.186:80/getlicenseplateshear'+'?mdkey='+dataString,
+				data: '',
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					$('#btn3').removeAttr('disabled');
+					if (data.code !== 0) {
+						alert(data.title + ":" + data.msg);
+					} else {
+						var imgsrc = data.data;
+						for(var i = 0; i < aImg.length; i++){							
+							$('.divide img').eq(i).attr('src', imgsrc[i]);
+						}	
+					}					
+				}
+			})
+		})
+		$('#btn4').click(function () {
+			$('#btn4').attr('disabled', 'disabled');
+			$.ajax({
+				type: 'get',
+				url: 'http://47.95.249.186:80/getlicenseplateinfo'+'?mdkey='+dataString,
+				data: '',
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					$('#btn4').removeAttr('disabled');
+					if (data.code !== 0) {
+						alert(data.title + ":" + data.msg);
+					} else {
+						var info = data.data;
+						$('#info').attr('value', info);
+					}					
+				}
+			})
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">s
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <div class="w">
+        <h1>车牌智能识别系统</h1>
+        <div class="main">
+            <h2>User Login</h2>
+            <form action="" id="myform" name="myform">
+                <input type="text" name="username" id="username" placeholder="用户名">
+                <input type="password" name="password" id="password" placeholder="密码">
+                <button type="button">注册</button>
+                <button type="submit">登录系统</button>
+            </form>
+        </div>
+    </div>
+    <script src="./js/jquery.min.js" type="text/javascript"></script>
+    <script src="./jquery-validation-1.19.0/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <script>
+    var oBtn = document.querySelector('button');
+    oBtn.onclick = function() {
+        window.location.href = './register.html';
+    }
+    $(function() {
+        var validate = $("#myform").validate({
+            debug: false, //调试模式取消submit的默认提交功能   
+            //errorClass: "label.error", //默认为错误的样式类为：error   
+            focusInvalid: false, //当为false时，验证无效时，没有焦点响应  
+            onkeyup: false,
+            submitHandler: function() { 
+            	var data = {
+    				"username": $('#username').val(),
+        			"password": $('#password').val()
+    			}          	
+                $.ajax({
+                    type: 'post',
+                    url: 'http://47.95.249.186:80/login',
+                    data: JSON.stringify(data),
+                    processData: false,
+                    contentType: 'application/json',
+                    success: function (data) {
+                    	var code = data.code
+                    	if(code === 0) {
+                    		window.location.href = './index.html';
+                    	} else {
+                    		alert(data.title + ":" + data.msg);
+                    	}
+                    }
+                });
+            },
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true,
+                    rangelength: [3, 10]
+                }
+            },
+            messages: {
+                username: {
+                    required: "用户名不能为空"
+                },
+                password: {
+                    required: "密码不能为空",
+                    rangelength: "密码最小长度:{0}, 最大长度:{1}。"
+                }
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

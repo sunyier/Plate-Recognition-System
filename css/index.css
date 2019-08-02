@@ -1,0 +1,151 @@
+body{
+	background: url(../img/index.jpg) no-repeat;
+	background-size: 100% 100%; 
+}
+.web{
+	width: 860px;
+	margin: 80px auto;
+}
+.left{
+	float: left;
+}
+.right{
+	float: right;
+	width: 400px;
+}
+p{
+	font-size: 20px;
+	line-height: 30px;
+	width: 100px;
+	height:30px;
+}
+.photo{
+	position: relative;
+	height: 400px;
+}
+.photo button{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin: 0;
+}
+.file-box input{
+	position: absolute;
+	top: -9999px;
+}
+.file-box label{
+	background: rgba(27,53,76,0.3);
+	display: block;
+	width: 200px;
+	height: 30px;
+	font-size: 16px;
+	line-height: 30px;
+	text-align: center;
+	background-size: 100%;
+	opacity: 0.7;
+	cursor: pointer;
+	border-radius: 5px;
+}
+.img-box{
+	margin: 10px 0;
+	width: 360px;
+	height: 290px;
+	border: 5px #ccc solid;
+	border-radius: 5px;
+}
+.img-box img{
+	width: 350px;
+	height: 280px;
+}
+.location{
+	width: 142px;
+	height: 62px;
+	border: 1px #175063 solid;
+	border-radius: 5px;
+	margin: 10px 0;
+}
+.location img{
+	width: 140px;
+	height: 60px;
+}
+.divide{
+	width: 360px;
+	height: 100px;
+	border: 1px #175063 solid;
+	border-radius: 5px;
+	margin: 10px 0;
+	padding: 0 4px;
+}
+.divide img{
+	float: left;
+	width: 40px;
+	height: 80px;
+	margin: 10px 5px;
+}
+.final{
+	width: 300px;
+	height:100px;
+	padding: 20px 0 20px;
+}
+.final span{
+	font-size: 16px;
+	line-height: 16px;
+}
+.final input{
+	display: inline-block;
+	width: 160px;
+	height: 40px;
+	font-size: 20px;
+	color: #000;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    margin-left: 5px;
+    text-align: center;
+    text-shadow:-1px -1px 0 #fff, 1px 1px 0 #000;
+}
+
+/*按钮悬停效果*/
+button{
+	width: 100px;
+	position: relative;
+	height:40px;
+	color: #fff;
+	font-size: 16px;
+	line-height: 40px;
+	border-radius: 5px;
+	border: none;
+	outline: none;
+	box-shadow: 0 5px 5px rgba(0,0,0,.3);
+	background: #000;
+    background: -webkit-linear-gradient(rgba(0,0,0,0),rgba(0,0,0,1));
+    opacity: 0.6;
+    cursor: pointer;
+    margin: 0 10px;
+    transition:800ms ease all;
+}
+button:hover{
+  background:#fff;
+  color:#0e7c86;
+}
+button:before,button:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #0e7c86;
+  transition:400ms ease all;
+}
+button:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+button:hover:before,button:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+
